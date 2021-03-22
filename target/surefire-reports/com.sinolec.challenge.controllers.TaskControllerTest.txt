@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.sinolec.challenge.controllers.TaskControllerTest
--------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.046 s - in com.sinolec.challenge.controllers.TaskControllerTest
