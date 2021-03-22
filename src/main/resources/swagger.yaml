@@ -1,0 +1,267 @@
+---
+swagger: "2.0"
+info:
+  description: This is the api for the Programming Challenge
+  version: 1.0.0
+  title: Programming Challenge
+host: task-service.com
+basePath: /api
+schemes:
+  - https
+security:
+  - api_key: []
+paths:
+  /tasks:
+    get:
+      tags:
+        - tasks
+      summary: list all tasks
+      operationId: listTasks
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProjectGenerationTask'
+    post:
+      tags:
+        - tasks
+      summary: Create a new task
+      operationId: createTask
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: task to create
+          required: true
+          schema:
+            $ref: '#/definitions/ProjectGenerationTask'
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProjectGenerationTask'
+        "405":
+          description: Invalid input
+  /tasks/{id}:
+    get:
+      tags:
+        - tasks
+      summary: get a tasks by id
+      operationId: getTask
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: id of task to return
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProjectGenerationTask'
+        "404":
+          description: not found
+    put:
+      tags:
+        - tasks
+      summary: update a tasks by id
+      operationId: updateTask
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: id of task to update
+          required: true
+          type: string
+          format: uuid
+        - in: body
+          name: body
+          description: updated task
+          required: true
+          schema:
+            $ref: '#/definitions/ProjectGenerationTask'
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProjectGenerationTask'
+        "404":
+          description: not found
+    delete:
+      tags:
+        - tasks
+      summary: delete a tasks by id
+      operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          description: id of task to delete
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "204":
+          description: successful operation
+        "404":
+          description: not found
+  /tasks/{id}/execute:
+    post:
+      tags:
+        - tasks
+      summary: execute a tasks by id
+      operationId: executeTask
+      parameters:
+        - name: id
+          in: path
+          description: id of task to execute
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "204":
+          description: successful operation
+        "404":
+          description: not found
+  /tasks/{id}/cancel:
+    post:
+      tags:
+        - tasks
+      summary: cancel a task by id
+      operationId: cancelTask
+      parameters:
+        - name: id
+          in: path
+          description: id of task to cancel
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "204":
+          description: successful operation
+        "404":
+          description: not found
+  /tasks/{id}/progress:
+    get:
+      tags:
+        - tasks
+      summary: get progress of a task by id
+      operationId: getTaskProgress
+      parameters:
+        - name: id
+          in: path
+          description: id of task to cancel
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TaskProgress'
+        "404":
+          description: not found
+  /tasks/{id}/result:
+    get:
+      tags:
+        - tasks
+      summary: downloads the task result
+      operationId: downloadTaskResult
+      parameters:
+        - name: id
+          in: path
+          description: id of task to get result
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successfull operation
+          schema:
+            type: file
+        "404":
+          description: not found
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Sinolec-Auth
+    in: header
+definitions:
+  TaskProgress:
+    properties:
+      task:
+        $ref: '#/definitions/GeneralTask'
+      progress:
+        type: integer
+  GeneralTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      creationDate:
+        type: string
+        format: date-time
+      type:
+        type: string
+        example: COUNTER_TASK
+        enum:
+          - COUNTER_TASK
+          - PROJECT_GENERATION_TASK
+      isExecuted:
+        type: boolean
+        example: false
+  CounterTask:
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      creationDate:
+        type: string
+        format: date-time
+      isExecuted:
+        type: boolean
+        example: false
+      startedAt:
+        type: string
+        format: date-time
+      cancelledat:
+        type: string
+        format: date-time
+      x:
+        type: integer
+        example: 0
+      y:
+        type: integer
+        example: 100
+  ProjectGenerationTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      creationDate:
+        type: string
+        format: date-time
+      isExecuted:
+        type: boolean
+        example: false

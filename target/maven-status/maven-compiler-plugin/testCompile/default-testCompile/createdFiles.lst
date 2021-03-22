@@ -1,0 +1,5 @@
+com/sinolec/challenge/controllers/TaskControllerIT.class
+com/sinolec/challenge/test/utils/TestConstants.class
+com/sinolec/challenge/services/task/executors/CounterTaskExecutorTest.class
+com/sinolec/challenge/test/utils/TaskCreator.class
+com/sinolec/challenge/controllers/TaskControllerTest.class

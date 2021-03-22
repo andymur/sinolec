@@ -1,0 +1,219 @@
+---
+swagger: "2.0"
+info:
+  description: This is a MarsGate API
+  version: 1.0.0
+  title: MarsGate API
+  contact:
+    email: andy@mars-gate.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /andymur/simple/1.0.0
+tags:
+- name: applications
+  description: All about your applications to Mars
+schemes:
+- https
+paths:
+  /applications:
+    get:
+      tags:
+      - applications
+      summary: list all your applications
+      description: Returns all your applications (submitted and unfinished)
+      operationId: listApplications
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: list of all available applications
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Application'
+    post:
+      tags:
+      - applications
+      summary: creates an application
+      description: Creates an application to the system
+      operationId: createApplication
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: application
+        description: Application to create
+        required: false
+        schema:
+          $ref: '#/definitions/Application'
+      responses:
+        "201":
+          description: created application
+          schema: {}
+        "400":
+          description: invalid input
+    delete:
+      tags:
+      - applications
+      summary: deletes your application
+      description: Deletes and application
+      operationId: deleteApplication
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: application
+        description: Application to delete
+        required: false
+        schema:
+          $ref: '#/definitions/Application'
+      responses:
+        "204":
+          description: application deleted
+        "404":
+          description: application not found
+    patch:
+      tags:
+      - applications
+      summary: Adds a part of an application (personal data, cv, essay)
+      description: Attaches some part of an application to it
+      operationId: editApplication
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: application
+        description: Application to alter
+        required: false
+        schema:
+          $ref: '#/definitions/Application'
+      responses:
+        "200":
+          description: changed application
+          schema: {}
+        "404":
+          description: application not found
+        "400":
+          description: invalid input
+  /applications/{id}:
+    get:
+      tags:
+      - applications
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of the application to return
+        required: true
+        type: string
+        format: uuid
+      responses:
+        "200":
+          description: requested application
+          schema: {}
+        "404":
+          description: application not found
+  /applications/submit:
+    post:
+      tags:
+      - applications
+      summary: submits your application
+      operationId: submitApplication
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: application
+        description: Application to submit
+        required: false
+        schema:
+          $ref: '#/definitions/Application'
+      responses:
+        "204":
+          description: application submitted
+        "404":
+          description: application not found
+definitions:
+  Application:
+    type: object
+    required:
+    - id
+    - state
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      state:
+        type: string
+        example: Completed
+        enum:
+        - Completed
+        - Unfinished
+      personalData:
+        $ref: '#/definitions/PersonalData'
+      essay:
+        type: string
+        example: Sehr geehrte Damen und Herren...
+      cv:
+        type: array
+        items:
+          $ref: '#/definitions/CVItem'
+  PersonalData:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      name:
+        type: string
+        example: Nice
+      surname:
+        type: string
+        example: Guy
+      birthdate:
+        type: string
+        format: date
+        example: 1989-10-10
+      email:
+        type: string
+        format: email
+        example: nice.guy@server.com
+      phone:
+        type: string
+        format: phone
+        example: +61xxxxxxxxx
+      location:
+        type: string
+        example: Sydney, Australia
+  CVItem:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      daterange:
+        type: string
+        format: date-range
+        example: 2007-2020
+      company:
+        type: string
+        example: SpaceX
+      position:
+        type: string
+        example: biologist
+      summary:
+        type: string
+        example: Doing a lot of cool things...
+      isCurrent:
+        type: boolean
