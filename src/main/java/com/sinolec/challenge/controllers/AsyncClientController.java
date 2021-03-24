@@ -23,7 +23,7 @@ public class AsyncClientController {
 
 	@GetMapping("/")
 	public List<String> requestApi() {
-		LOGGER.debug("requestApi.start;", httpClient);
+		LOGGER.info("requestApi.start; client={}", httpClient);
 		return Collections.emptyList();
 	}
 }
